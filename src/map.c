@@ -8,15 +8,15 @@
 #include "../include/sv_functiontype.h"
 #include <stdio.h>
 
-void initialize_Map(const char* mapFile, Map* map)
+void init(const char* File, Map* map)
 {
-    FILE* mapFilePtr = fopen(mapFile, "r");
-    if (mapFile == NULL) {
+    FILE* Fileptr = fopen(File, "r");
+    if (File == NULL) {
         perror("Failed to open file");
         exit(1);
     }
-    fscanf(mapFilePtr, "%f %d %d ", &map->gravity, &map->width, &map->height);
+    fscanf(Fileptr, "%f %d %d ", &map->gravity, &map->width, &map->height);
     map->cells = (char*)malloc(map->width * map->height * sizeof(char));
-    fread(map->cells, sizeof(char), map->width * map->height, mapFilePtr);
-    fclose(mapFilePtr);
+    fread(map->cells, sizeof(char), map->width * map->height, Fileptr);
+    fclose(Fileptr);
 }

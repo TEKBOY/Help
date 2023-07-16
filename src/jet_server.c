@@ -7,52 +7,52 @@
 
 #include "../include/sv_functiontype.h"
 
-void initialize_ServerSocket(int* serverSocket, int port)
+void initialize(int* sockett, int port)
 {
-    *serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (*serverSocket == -1) {
-        perror("Failed to create socket");
+    *sockett = socket(AF_INET, SOCK_STREAM, 0);;
+    if (*sockett == -1) {
+        perror("Failed to create sockett");
         exit(1);
     }
-
-    struct sockaddr_in serverAddress;
-    serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
-    serverAddress.sin_port = htons(port);
-    if (bind(*serverSocket, (struct sockaddr*)&serverAddress,
-    sizeof(serverAddress)) == -1) {
-        perror("Failed to bind socket");
+    struct sockaddr_in serveradd;
+    serveradd.sin_family = AF_INET;
+    serveradd.sin_addr.s_addr = INADDR_ANY;
+    serveradd.sin_port = htons(port);
+    if (bind(*sockett, (struct sockaddr*)&serveradd,
+    sizeof(serveradd)) == -1) {
+        perror("Failed to bind sockett");
         exit(1);
     }
-
-    if (listen(*serverSocket, MAX_CLIENTS) == -1) {
+    if (listen(*sockett, MAX_CLIENTS) == -1) {
         perror("Failed to listen for connections");
         exit(1);
     }
-    printf("Listening on port %d\nWaiting for connections...\n", port);
+    printf("Listening on port %d\n", port);
+    printf("Waiting for connections...\n");
 }
 
-void runServer(int serverSocket, const Map* map)
+void run(int sockett, const Map* map)
 {
     Client clients[MAX_CLIENTS];
-    int numClients = 0;
+    int numclients = 0;
 
     while (1) {
-        accept_Clients(serverSocket, clients, &numClients, map);
-        if (numClients >= MAX_CLIENTS) {
-            for (int i = 0; i < numClients; i++) {
-                handleClient_Requests(&clients[i],
-                clients, numClients, map);
+        acceptclient(sockett, clients, &numclients, map);
+        if (numclients >= MAX_CLIENTS) {
+            for (int i = 0; i < numclients; i++) {
+                handleclientrequests(&clients[i],
+                clients, numclients, map);
             }
             break;
         }
     }
-    close(serverSocket);
+    close(sockett);
     free(map->cells);
 }
 
-void executeServer(int port, const Map* map) {
-    int serverSocket;
-    initialize_ServerSocket(&serverSocket, port);
-    runServer(serverSocket, map);
+void execute(int port, const Map* map)
+{
+    int sockett;
+    initialize(&sockett, port);
+    run(sockett, map);
 }

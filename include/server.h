@@ -24,7 +24,7 @@ typedef struct {
     int x;
     int y;
     int score;
-    int jpState;
+    int state;
 } Client;
 
 typedef struct {
